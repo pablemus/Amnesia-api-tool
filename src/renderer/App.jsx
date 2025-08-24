@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Login from './Components/login'
-import Register from './Components/register'
 import Dashboard from './Components/views/dashboard'
+import Login from './Components/views/login'
+import Register from './Components/views/register'
 export default function App() {
   return (
     <div className="min-h-screen text-white">

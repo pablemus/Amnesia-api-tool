@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { showErrorToast } from '../utils/showErrorAutoClose';
+import { showSuccessToastRedirect } from '../utils/showSuccessAutoClose';
 import logo from './assets/amnesia.png';
-import { showErrorToast } from './showErrorAutoClose';
-import { showSuccessToastRedirect } from './showSuccessAutoClose';
 const api = process.env.API_URL;
 export default function Login() {
     const navigator = useNavigate();

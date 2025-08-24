@@ -2,10 +2,10 @@ import axios from 'axios';
 import { LogOut } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BodyEditor from '../BodyRequestComponent';
-import { CustomDropdown } from "../CustomDropdown";
-import ResponseViewer from "../ResponseViewer";
-import { rginz } from "../engine";
+import BodyEditor from '../dashboardComponents/BodyRequestComponent';
+import { CustomDropdown } from "../dashboardComponents/CustomDropdown";
+import ResponseViewer from "../dashboardComponents/ResponseViewer";
+import { rginz } from "../utils/engine";
 const api = process.env.API_URL;
 export default function Dashboard() {
   const [endpoint, setEndpoint] = useState('');
