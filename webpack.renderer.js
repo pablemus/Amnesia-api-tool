@@ -1,19 +1,28 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-const webpack = require('webpack')
-const dotenv = require('dotenv')               // ⬅️
-dotenv.config({ path: path.resolve(__dirname, '.env') }) // ⬅️ carga .env
+// webpack.renderer.js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+const isProd = process.env.NODE_ENV === 'production';
+
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/renderer/index.jsx',
+  target: 'web',
+  entry: path.resolve(__dirname, 'src/renderer/index.jsx'),
   output: {
     path: path.resolve(__dirname, 'dist/renderer'),
     filename: 'renderer.[contenthash].js',
-    publicPath: '/', // importante
-    clean: true
+    // CLAVE para file:// (nada de '/')
+    publicPath: './',
+    clean: true,
+    // para que los assets queden relativos también
+    assetModuleFilename: 'assets/[name][ext]'
   },
-  devtool: 'inline-source-map',
+  devtool: isProd ? false : 'inline-source-map',
   devServer: {
     port: 3000,
     hot: true,
@@ -36,20 +45,25 @@ module.exports = {
           }
         }
       },
-      { test: /\.css$/, use: ['style-loader','css-loader','postcss-loader'] },
-      { test: /\.(png|jpg|jpeg|gif|svg|ico)$/, type: 'asset/resource' }
+      { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
+      { test: /\.(png|jpe?g|gif|svg|ico)$/, type: 'asset/resource' }
     ]
   },
-  resolve: { extensions: ['.js','.jsx'] },
+  resolve: { extensions: ['.js', '.jsx'] },
   plugins: [
-    new HtmlWebpackPlugin({ template: 'public/index.html' }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'public/index.html'),
+      scriptLoading: 'defer',
+      minify: isProd
+    }),
     new MonacoWebpackPlugin({
-      languages: ['json','javascript'],
-      filename: 'static/[name].worker.js' // evita loader.js
+      languages: ['json', 'javascript'],
+      // importante: que apunte relativo en file://
+      publicPath: './',
+      filename: 'static/[name].worker.js'
     }),
     new webpack.DefinePlugin({
-    'process.env.API_URL': JSON.stringify(process.env.API_URL || 'http://localhost:3000')
-  })
-    
+      'process.env.API_URL': JSON.stringify(process.env.API_URL || 'http://localhost:3000')
+    })
   ]
-}
+};

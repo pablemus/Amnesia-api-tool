@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "description": "HTTP Client built with Electron + React + Tailwind + Monaco",
   "main": "dist/main/main.js",
+  "author": "TuNombre",
+  "license": "ISC",
   "scripts": {
     "dev:main": "webpack --config webpack.main.js --watch",
     "dev:renderer": "webpack serve --config webpack.renderer.js",
     "dev": "concurrently \"npm:dev:main\" \"npm:dev:renderer\" \"wait-on http://localhost:3000 && electron .\"",
+
     "build:main": "cross-env NODE_ENV=production webpack --config webpack.main.js",
     "build:renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.js",
-    "build": "npm run build:main && npm run build:renderer && electron-builder"
+
+    "build": "npm run build:main && npm run build:renderer && electron-builder",
+
+    "build:win": "npm run build:main && npm run build:renderer && electron-builder --win nsis",
+    "build:linux": "npm run build:main && npm run build:renderer && electron-builder --linux AppImage",
+    "build:mac": "npm run build:main && npm run build:renderer && electron-builder --mac dmg"
   },
-  "author": "TuNombre",
-  "license": "ISC",
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/postcss": "^4.1.12",
@@ -50,23 +56,54 @@
   "build": {
     "appId": "com.pablo.amnesia",
     "productName": "Amnesia",
+    "asar": true,
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "electron/assets"
     },
     "files": [
       "dist/**/*",
-      "node_modules/**/*",
-      "package.json"
+      "package.json",
+      "!**/*.map"
     ],
+    "extraResources": [
+      {
+        "from": "electron/assets/",
+        "to": "assets",
+        "filter": ["**/*"]
+      }
+    ],
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "category": "public.app-category.developer-tools",
+      "icon": "electron/assets/amnesia.icns"
     },
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "electron/assets/amnesia.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     },
     "linux": {
-      "target": "AppImage"
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Development",
+      "icon": "electron/assets"
     }
-  },
-  "keywords": []
+  }
 }
