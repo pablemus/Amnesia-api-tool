@@ -1,5 +1,5 @@
 
-# Amnesia – API Tool ligera
+# Amnesia – API Tool
 
 ![Electron](https://img.shields.io/badge/Electron-20232A?style=for-the-badge&logo=electron&logoColor=61DAFB)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
