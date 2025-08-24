@@ -6,49 +6,76 @@ import BodyEditor from '../dashboardComponents/BodyRequestComponent';
 import { CustomDropdown } from "../dashboardComponents/CustomDropdown";
 import ResponseViewer from "../dashboardComponents/ResponseViewer";
 import { rginz } from "../utils/engine";
+
 const api = process.env.API_URL;
+
 export default function Dashboard() {
   const [endpoint, setEndpoint] = useState('');
   const [method, setMethod] = useState('GET');
   const [body, setBody] = useState('');
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState('');  // { raw, isHtml, status, headers }
   const [resStatus, setResStatus] = useState('Inactivo');
   const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
-  useEffect(()=>{
+
+  useEffect(() => {
     const cachedToken = localStorage.getItem("token");
-    if(cachedToken){
-      const v = async () =>{
-        const payload = {
-          token:cachedToken
+    if (cachedToken) {
+      const v = async () => {
+        try {
+          const payload = { token: cachedToken };
+          const res = await axios.post(`${api}/auth/verify`, payload);
+          if (!res) navigator('/login');
+        } catch {
+          navigator('/login');
         }
-        const res = await axios.post(`${api}/auth/verify`, payload);
-        if(!res){
-          navigator('/login')
-        }
-      }
+      };
       v();
-    } else{
+    } else {
       navigator('/login');
     }
-  }, [])
+  }, []);
+
+  const isHtmlContentType = (ct) =>
+    typeof ct === 'string' && ct.toLowerCase().includes('text/html');
+
   const handleRequest = async () => {
     try {
       setLoading(true);
       setResStatus("Procesando…");
-      const res = await rginz(method, endpoint, body);
-      setResponse(res);
-      setResStatus(typeof res?.status === 'number' ? res.status : "Procesado");
 
-      // Guarda lo último usado después de enviar
-    } catch (err) {
+      const res = await rginz(method, endpoint, body);
+      // res: { ok, status, data, headers }
+      const headers = res?.headers || {};
+      // axios normaliza a lowercase; por si acaso buscamos ambas
+      const ct = headers['content-type'] || headers['Content-Type'] || '';
+
+      const isHtml = isHtmlContentType(ct);
+
       setResponse({
-        message: err?.message,
-        status: err?.response?.status,
-        data: err?.response?.data
+        raw: res?.data,
+        isHtml,
+        status: res?.status ?? null,
+        headers
       });
-      setResStatus(err?.response?.status ?? "Error");
-      console.log(err);
+
+      setResStatus(typeof res?.status === 'number' ? res.status : "Procesado");
+    } catch (err) {
+      // Estructura de error “normalizada”
+      const status = err?.response?.status ?? 0;
+      const data = err?.response?.data ?? err?.message ?? 'Error';
+      const headers = err?.response?.headers || {};
+      const ct = headers['content-type'] || headers['Content-Type'] || '';
+      const isHtml = isHtmlContentType(ct);
+
+      setResponse({
+        raw: data,
+        isHtml,
+        status,
+        headers
+      });
+      setResStatus(status || "Error");
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -66,13 +93,13 @@ export default function Dashboard() {
     return `${base} border-zinc-600/30 text-zinc-300 bg-zinc-600/10`;
   }, [resStatus]);
 
-  const handleLogout = async () =>{
+  const handleLogout = async () => {
     const token = localStorage.getItem("token");
-    if(token){
+    if (token) {
       localStorage.removeItem("token");
       navigator('/login');
     }
-  }
+  };
 
   return (
     <main className="h-screen w-full bg-[#0B0C10] text-zinc-200 overflow-hidden flex flex-col">
@@ -96,21 +123,21 @@ export default function Dashboard() {
           {loading ? 'Sending…' : 'Send'}
         </button>
         <button
-      onClick={handleLogout}
-      className="
-        flex items-center gap-2
-        px-5 py-2 rounded-xl font-medium
-        bg-[#1A1A1A] text-[#F2EFE7]
-        border border-[#2A2A2A]
-        shadow-[0_4px_12px_rgba(0,0,0,0.4)]
-        transition-all duration-300
-        hover:bg-[#2A2A2A] hover:shadow-[0_6px_20px_rgba(0,0,0,0.6)]
-        active:scale-95
-      "
-    >
-      <LogOut size={18} strokeWidth={2} />
-      Log out
-    </button>
+          onClick={handleLogout}
+          className="
+            flex items-center gap-2
+            px-5 py-2 rounded-xl font-medium
+            bg-[#1A1A1A] text-[#F2EFE7]
+            border border-[#2A2A2A]
+            shadow-[0_4px_12px_rgba(0,0,0,0.4)]
+            transition-all duration-300
+            hover:bg-[#2A2A2A] hover:shadow-[0_6px_20px_rgba(0,0,0,0.6)]
+            active:scale-95
+          "
+        >
+          <LogOut size={18} strokeWidth={2} />
+          Log out
+        </button>
       </header>
 
       {/* Workspace */}
@@ -139,10 +166,10 @@ export default function Dashboard() {
             <span className="text-zinc-500">Tests</span>
             <span className="text-zinc-500">Mock</span>
             <span className="text-zinc-500">Console</span>
-            <span className="ml-auto">{String(resStatus ?? "Sin respuesta")}</span>
-            <span className={statusStyle} />
+            <span className={`ml-auto ${statusStyle}`}>{typeof resStatus === "number" ? String(resStatus) : String(resStatus ?? "Inactivo")}</span>
           </div>
           <div className="flex-1 min-h-0 p-3 flex flex-col">
+            {/* ResponseViewer ahora recibe el objeto */}
             <ResponseViewer response={response} statusLabel={String(resStatus ?? "Inactivo")} />
           </div>
         </section>

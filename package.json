@@ -1,7 +1,7 @@
 {
   "name": "amnesia-api-tool",
-  "version": "1.0.0",
-  "description": "HTTP Client built with Electron + React + Tailwind + Monaco",
+  "version": "2.0.0",
+  "description": "A lightweight HTTP client",
   "main": "dist/main/main.js",
   "scripts":{
   "dev:main":"webpack --config webpack.main.js --watch",
@@ -17,7 +17,7 @@
   "build:mac":"npm run build:main && npm run build:preload && npm run build:renderer && electron-builder --mac"
 }
 ,
-  "author": "TuNombre",
+  "author": "Pablemus",
   "license": "ISC",
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
