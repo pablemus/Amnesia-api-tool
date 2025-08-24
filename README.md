@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ---
-![Preview]([https://imgur.com/a/pp9ZBbB](https://i.imgur.com/mdhv6Ou.png))
+![Preview](https://i.imgur.com/mdhv6Ou.png)
 
 ---
 
