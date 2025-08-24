@@ -9,7 +9,7 @@
 
 ---
 
-Una app de escritorio minimalista inspirada en **Postman** e **Insomnia**. Construida con **Electron**, **React**, **Axios**, **React Router** y **SweetAlert2**. Pensada para ser simple, rápida, sin andarse con vueltas. El backend corre aparte (no está en este repositorio).
+Una app de escritorio minimalista inspirada en **Postman** e **Insomnia**. Construida con **Electron**, **React**, **Axios**, **React Router** y **SweetAlert2**. Pensada para ser simple y rápida.
 
 ---
 
@@ -74,7 +74,7 @@ npm run electron:build
 ## 🔑 Variables de entorno
 Crea un archivo `.env` con:
 ```
-VITE_API_BASE_URL=https://tu-backend-api.com
+API_URL=https://tu-backend-api.com
 ```
 
 ---
@@ -92,13 +92,8 @@ VITE_API_BASE_URL=https://tu-backend-api.com
 
 ---
 
-## 📸 Screenshots
-*(Agrega aquí tus capturas para mostrar la UI)*  
-
----
-
 ## 🤝 Contribución
-Sugerencias y PRs son bienvenidos. Si vas a contribuir, respeta las convenciones del proyecto y sigue las mejores prácticas.
+Sugerencias y PRs son bienvenidos.
 
 ---
 
