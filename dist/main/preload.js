@@ -1,0 +1,1 @@
+(()=>{var e={157:e=>{"use strict";e.exports=require("electron")}},r={};const{contextBridge:n,ipcRenderer:t}=function n(t){var o=r[t];if(void 0!==o)return o.exports;var i=r[t]={exports:{}};return e[t](i,i.exports,n),i.exports}(157);n.exposeInMainWorld("amnesia",{ping:e=>t.invoke("ping",e)})})();
