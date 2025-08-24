@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from './assets/amnesia.png';
 import { showErrorToast } from './showErrorAutoClose';
 import { showSuccessToastRedirect } from './showSuccessAutoClose';
 const api = process.env.API_URL;
@@ -73,7 +74,7 @@ export default function Login() {
           <div className="mb-5 flex flex-col items-center gap-4">
             <div className="rounded-full bg-[#1A1A1A] shadow-[0_0_60px_-20px_rgba(242,239,231,0.15)] ">
                 <img
-                    src="/amnesia.png"
+                    src={logo}
                     alt="Amnesia Logo"
                     className="w-40 h-40 select-none"
                     draggable={false}

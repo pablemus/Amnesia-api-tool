@@ -3,14 +3,20 @@
   "version": "1.0.0",
   "description": "HTTP Client built with Electron + React + Tailwind + Monaco",
   "main": "dist/main/main.js",
-  "scripts": {
-    "dev:main": "webpack --config webpack.main.js --watch",
-    "dev:renderer": "webpack serve --config webpack.renderer.js",
-    "dev": "concurrently \"npm:dev:main\" \"npm:dev:renderer\" \"wait-on http://localhost:3000 && electron .\"",
-    "build:main": "cross-env NODE_ENV=production webpack --config webpack.main.js",
-    "build:renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.js",
-    "build": "npm run build:main && npm run build:renderer && electron-builder"
-  },
+  "scripts":{
+  "dev:main":"webpack --config webpack.main.js --watch",
+  "dev:preload":"webpack --config webpack.preload.js --watch",
+  "dev:renderer":"webpack serve --config webpack.renderer.js",
+  "dev":"concurrently \"npm:dev:main\" \"npm:dev:preload\" \"npm:dev:renderer\" \"wait-on http://localhost:3000 && electron .\"",
+  "build:main":"cross-env NODE_ENV=production webpack --config webpack.main.js",
+  "build:preload":"cross-env NODE_ENV=production webpack --config webpack.preload.js",
+  "build:renderer":"cross-env NODE_ENV=production webpack --config webpack.renderer.js",
+  "build":"npm run build:main && npm run build:preload && npm run build:renderer && electron-builder",
+  "build:linux":"npm run build:main && npm run build:preload && npm run build:renderer && electron-builder --linux",
+  "build:win":"npm run build:main && npm run build:preload && npm run build:renderer && electron-builder --win",
+  "build:mac":"npm run build:main && npm run build:preload && npm run build:renderer && electron-builder --mac"
+}
+,
   "author": "TuNombre",
   "license": "ISC",
   "dependencies": {
@@ -61,9 +67,10 @@
     "mac": {
       "target": "dmg"
     },
-    "win": {
-      "target": "nsis"
-    },
+ "win": {
+    "target": "nsis",
+    "icon": "dist/assets/amnesia.ico"
+  },
     "linux": {
       "target": "AppImage"
     }

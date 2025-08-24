@@ -1,0 +1,1 @@
+const path=require('path');const isProd=process.env.NODE_ENV==='production';module.exports={mode:process.env.NODE_ENV||'development',target:'electron-preload',entry:'./src/main/preload.js',output:{path:path.resolve(__dirname,'dist/main'),filename:'preload.js'},devtool:isProd?false:'source-map',node:{__dirname:false,__filename:false}};

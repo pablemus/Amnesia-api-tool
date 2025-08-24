@@ -1,23 +1,5 @@
-/*
- * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/main/main.js":
-/*!**************************!*\
-  !*** ./src/main/main.js ***!
-  \**************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-eval("{const { app, BrowserWindow } = __webpack_require__(/*! electron */ \"electron\")\nconst path = __webpack_require__(/*! path */ \"path\")\n\nfunction createWindow() {\n  const mainWindow = new BrowserWindow({\n    width: 1200,\n    height: 800,\n    webPreferences: {\n      preload: path.join(__dirname, 'preload.js'),\n      contextIsolation: true,\n      nodeIntegration: false\n    }\n  })\n\n  if (true) {\n    mainWindow.loadURL('http://localhost:3000')\n    mainWindow.webContents.openDevTools()\n  } else // removed by dead control flow\n{}\n}\n\napp.whenReady().then(() => {\n  createWindow()\n  app.on('activate', () => {\n    if (BrowserWindow.getAllWindows().length === 0) createWindow()\n  })\n})\n\napp.on('window-all-closed', () => {\n  if (process.platform !== 'darwin') app.quit()\n})\n\n\n//# sourceURL=webpack://amnesia-api-tool/./src/main/main.js?\n}");
-
-/***/ }),
 
 /***/ "electron":
 /*!***************************!*\
@@ -68,11 +50,16 @@ module.exports = require("path");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/main/main.js");
-/******/ 	
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!**************************!*\
+  !*** ./src/main/main.js ***!
+  \**************************/
+const{app,BrowserWindow}=__webpack_require__(/*! electron */ "electron");const path=__webpack_require__(/*! path */ "path");function createWindow(){const mainWindow=new BrowserWindow({width:1200,height:800,webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});if(true){mainWindow.loadURL('http://localhost:3000');}else// removed by dead control flow
+{}}app.whenReady().then(()=>{createWindow();app.on('activate',()=>{if(BrowserWindow.getAllWindows().length===0)createWindow();});});app.on('window-all-closed',()=>{if(process.platform!=='darwin')app.quit();});
+
+})();
+
 /******/ })()
 ;
+//# sourceMappingURL=main.js.map
