@@ -8,6 +8,9 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ---
+![Preview](https://imgur.com/a/pp9ZBbB)
+
+---
 
 Una app de escritorio minimalista inspirada en **Postman** e **Insomnia**. Construida con **Electron**, **React**, **Axios**, **React Router** y **SweetAlert2**. Pensada para ser simple, rápida, sin andarse con vueltas. El backend corre aparte (no está en este repositorio).
 
